@@ -139,7 +139,7 @@ audio.addEventListener('timeupdate', (event) => {
     const currentTime = Math.floor(audio.currentTime);
     const duration = Math.floor(audio.duration);
     duration.innerText = `${currentTime}`
-    console.log(currentTime + "/" + duration/60)
+    //console.log(currentTime + "/" + duration/60)
 }, true);
 
 // handle Volume, add volume button on the next update
