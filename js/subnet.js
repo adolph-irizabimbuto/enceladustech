@@ -164,6 +164,11 @@ returnNetworkAddress(rawIPAddress, rawSubnetMask);
 displayNetwork();
 
 
+
+
+
+
+
 // Config Generator 
 //VARIABLES
 
@@ -245,10 +250,33 @@ function address(){
             TEXTAREA.append("Error! Please enter a Ticket number")}
     }
 
+
+// WEBDILTER-ACTION 
+function returnWebfilterAction(){
+    const actions = {
+        'wf-action-accept-radio': 'accept',
+        'wf-action-exe-radio': 'exempt',
+        'wf-action-monitor-radio': 'monitor',
+        'wf-action-block-radio': 'block'
+    };
+
+    for (const [id, action] of Object.entries(actions)) {
+        const element = document.getElementById(id);
+        if (element?.checked) {
+            return action;
+        }
+    }
+}
+
+
 // Webilfilter 
 function generateWebfilter(URLs){
-    const SIMPLE_RADIO = document.getElementById('wf-simple-radio');
+   
     const WEBFILTER_INDEX = document.getElementById('wf-index');
+    const SIMPLE_RADIO = document.getElementById('wf-simple-radio');
+    
+    
+
     let wf_number = WEBFILTER_INDEX.value.trim();
     let type = SIMPLE_RADIO.checked ? "simple" : "wildcard";
     
@@ -267,7 +295,7 @@ function generateWebfilter(URLs){
             TEXTAREA.append("edit 0\n")
             TEXTAREA.append(`set type ${type}\n`)
             TEXTAREA.append(`set url ${SANITISED_URL}\n`)
-            TEXTAREA.append("set action block\n")
+            TEXTAREA.append(`set action ${returnWebfilterAction()}\n`)
             TEXTAREA.append("next\n")
         }
         
@@ -276,6 +304,11 @@ function generateWebfilter(URLs){
     TEXTAREA.append("next\n")
     TEXTAREA.append("end\n")
 }
+
+
+
+
+
 
 //EVENT LISTENER
     MY_FORM.addEventListener("submit", function (e) {

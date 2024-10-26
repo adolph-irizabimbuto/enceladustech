@@ -82,7 +82,7 @@
     <br>
     <div id="accordion">
     <button type="button" id="subnet-button" class="btn btn-info" data-toggle="collapse" aria-expanded="false" data-target="#subnet" aria-controls="#subnet"> Subnet Calculator </button>
-    <button type="button" class="btn btn-info" data-toggle="collapse" aria-expanded="false" data-target="#config-generator" aria-controls="#config-generator""> Address Object Config Generator </button>
+    <button type="button" class="btn btn-info" data-toggle="collapse" aria-expanded="false" data-target="#config-generator" aria-controls="#config-generator""> Fortigate Config Generator </button>
     <button type="button" class="btn btn-info" data-toggle="collapse" aria-expanded="false" data-target="#destination-network"> Destination Network </button>
     <button type="button" class="btn btn-info" data-toggle="collapse" aria-expanded="false" data-target="#binary-convertor">Decimal to Binary Converter </button>
     <button type="button" class="btn btn-info" data-toggle="collapse" aria-expanded="false" data-target="#nato-alphabet">Nato Alphabet</button>
@@ -167,14 +167,16 @@
     <br>
     <h3>Config Generator</h3>
     <p>
+      <h4>Address Objects</h4>
+      <hr style="height: 1px;"/>
       <br>
     Caveats:
     
     <ul>
       <li>The uploaded file MUST be in csv format.</li>
-      <li>The CSV file should contain less than 600 lines/ip addresses. This is not a limitaion of the generator, its a limitation of FortiOS. <br>
+      <li>The CSV file should contain less than 600 lines/ip addresses/FQDNs. This is a limitation of FortiOS. <br>
           You can use <a href="https://mightymerge.io/split-csv-files/" style="color: red;">this website</a>  to split a CSV file with more than 600 entries. </li>
-      <li>The Address objects generated, will be /32. More functionality to come...  </li>
+      <li>The Address objects generated, will be /32. (More functionality to come)  </li>
       <li>Address Group Name is optional, leave it blank if you want to generate address objects only.</li>
   </ul>
         
@@ -195,7 +197,7 @@
             <div class="input-group mb-3">
                 <!-- ticket number  -->
                 <div class="input-group-prepend">
-                    <span style="padding-right: 2.5rem;" class="input-group-text" >Ticket Number</span>
+                    <span style="padding-right: 2.5rem;" class="input-group-text" >Change Log comment</span>
                     <input type="text" class="form-control" id="ticket-number" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                 </div>
             </div>
@@ -212,20 +214,20 @@
                <span style="padding-right: 2.5rem;" class="input-group-text" >Type</span>
               </div>
              
-              <div class="col-sm-10">
-                <div class="form-check">
+              <div class="col-sm-10" style="padding: 0.8rem;">
+                <div class="form-check form-check-inline">
                   <input onchange="toggleWebfilter()"  class="form-check-input" type="radio" name="gridRadios" id="subnet-radio" value="option1" checked>
-                  <label class="form-check-label" for="gridRadios1">
+                  <label class="form-check-label " for="gridRadios1">
                     IPs/Subnet
                   </label>
                 </div>
-                <div class="form-check">
+                <div class="form-check form-check-inline">
                   <input onchange="toggleWebfilter()"  class="form-check-input" type="radio" name="gridRadios" id="fqdn-radio" value="option2">
                   <label class="form-check-label" for="gridRadios2">
                     Domains/FQDNs
                   </label>
                 </div>
-                <div class="form-check">
+                <div class="form-check form-check-inline">
                   <input onchange="toggleWebfilter()" class="form-check-input" type="radio" name="gridRadios" id="webfilter-radio" value="option3">
                   <label class="form-check-label" for="webfilter-radio">
                     Webfilter
@@ -251,17 +253,16 @@
    <!-- Webfilter hidden -->
           
    <div id="webfilter-fields" style="display: none; margin-top: 2rem;">
+    <h4>Webfilter</h4>
     <dir>
+     
       <hr style="height: 1px;"/>
       <ul>
-        <li>"Webfilter Number" is the index of the webfilter whose URL filter you want  
-           to add to"</li>
+        <li>"Webfilter Number" refers to the index of the web filter where you want to add the URL filter.</li>
         <li>
-          if you want to append to multiple webfilters, generate a config for each webfilter individually, changing the "webfilter number" 
+          If you wish to append the URL filter to multiple web filters, generate a separate configuration 
+          for each web filter, ensuring you update the "Webfilter Number" accordingly for each one. 
         </li>
-      <li>
-        This script will block the urls by defualt. if you want to whitelist the IPs, generate the script then find and replace "block" with "permit"
-      </li>
       </ul>
     </dir>  
 
@@ -270,8 +271,11 @@
             <span class="input-group-text" >Webfilter Number</span>
             <input type="text" class="form-control" id="wf-index" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
         </div>
-      </div>
-        <div class="input-group mb-3">
+    </div>
+  
+
+<!-- TYPE -->
+      <span class="input-group mb-3">
           <div class="input-group-prepend">
            <span style="padding-right: 2.5rem;" class="input-group-text" >Type</span>
           </div>
@@ -289,15 +293,50 @@
             </label>
           </div>
         </div>
-    </div>
-    </div>
+      </span>
+    
+
+
+<!-- ACTION -->
+    <span>
+      <span class="input-group mb-3">
+          <div class="input-group-prepend">
+           <span  class="input-group-text" >Action</span>
+          </div>
+        <div class="col-sm-10" style="padding-top: 0.8rem;">
+          <span class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gridRadios3" id="wf-action-exe-radio" value="option2" checked>
+            <label class="form-check-label" for="wf-action-exe-radio">Exempt</label>
+          </span>
+
+          <span class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gridRadios3" id="wf-action-accept-radio" value="option2">
+            <label class="form-check-label" for="wf-action-accept-radi">Accept  </label>
+          </span>
+
+          <span class="form-check form-check-inline ">
+            <input class="form-check-input" type="radio" name="gridRadios3" id="wf-action-monitor-radio" value="option2">
+            <label class="form-check-label" for="wf-action-monitor-radio"> Monitor </label>
+          </span>
+
+          <span class="form-check form-check-inline ">
+            <input class="form-check-input" type="radio" name="gridRadios3" id="wf-action-block-radio" value="option2">
+            <label class="form-check-label" for="wf-action-block-radio" style="color: red;"> Block </label>
+          </span>
+        </div>
+      </span>  
+    </span>
+  
+  
+  </div>
 
 
             <div style="text-align: center; margin-top: 1rem;">
                 <button type="submit" class="btn btn-primary" style="background-color: #DA291C;" id="" onclick="address()">Generate Config</button>
             </div>
-       
-                <label for="TEXTAREA">Fortigate Config:</label>
+            
+            <label for="TEXTAREA"></label>
+            <h4>Generated configuration:</h4>
                 <textarea class="form-control" id="TEXTAREA" rows="20"></textarea>
 
             </div>
