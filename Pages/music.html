@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <link rel="icon" href="/images/global/favicon.png" type="image/png"/>
+    <meta name="keywords" content="Enceladys, Technology, Web Applications, Space, Networking" />
+    <meta name="description" content="An ode to space, maths and computing" />
+    <meta name="author" content="" />
+    
+    <link rel="canonical" href="https://www.enceladustech.com" />
+    <script defer data-domain="enceladustech.com" src="https://plausible.io/js/script.js"></script>  
+    <title>Enceladus Tech | Andalús Music</title>
+   
+    <link rel="stylesheet" href="https://bootswatch.com/4/lux/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/style2.css">
+    
+    
+</head>
+<body id="body">
+
+    <nav class="navbar navbar-expand-md bg-blue navbar-dark w-100">
+        <a class="navbar-brand" href="/index.html">Enceladus</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse w-100" id="collapsibleNavbar">
+                <ul class="nav navbar-nav nav-fill w-100" >
+                    <li><a class = "nav-item nav-link px-2"href="josephus.html">The Josephus Problem</a></li>
+                    <li><a class = "nav-item nav-link px-2"href="poerty.html">Cairo</a></li>
+                    <li><a class = "nav-item nav-link px-2"href="writting.html">Láhej</a></li>
+                    <li><a class = "nav-item nav-link px-2"href="net-tools.html">Network Tools</a></li>
+                    <li><a class = "nav-item nav-link px-2"href="https://blog.enceladustech.com">Misr Blog</a></li>
+                </ul>
+            
+        </div>  
+    </nav>
+
+    <h3 style="margin-bottom: 4rem;" id="site-title">Andalús Music</h1>
+
+
+    <div class="music-container" id="musicContainer">
+        <div class="music-info" id="musicInfo">
+            <i>
+                <h7 id="artist"></h3>
+            </i>
+            <h3 id="title" >Ukelele</h4> 
+            
+            <div class="progress-container">
+                <div class="progress"></div>
+            </div>
+        </div>
+        <audio src="" id="audio"></audio>
+
+        <div class="img-container">
+            <img src="igm/efe02ba414043d7b0443b6179f0c71e4.1000x1000x1.jpg" alt="music-cover"
+            id="cover">
+        </div>
+
+        <div class="navigation">
+            <button id="prev" class="action-btn" style="background-color: transparent;">
+                <i class="fas fa-backward";></i>
+            </button>
+
+            <button id="play" class="action-btn action-btn-big">
+                <i class="fas fa-play"></i>
+            </button>
+
+            <button id="next" class="action-btn">
+                <i class="fas fa-forward"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="form-group" style="margin:-3rem 0 0 0rem">
+        <div class="custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input" id="shuffle" unchecked onchange="handleShuffle()">
+          <label class="custom-control-label" for="shuffle" id="toggleShuffle">Shuffle OFF </label>
+        </div>
+    </div> 
+    
+    <div class="form-group" style="margin:0.5rem 0 0 0rem">
+        <div class="custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input" id="darkmode" unchecked onchange="handleDarkMode()">
+          <label class="custom-control-label" for="darkmode" id="toggleMessage" >Turn Dark Mode ON</label>
+        </div>
+    </div>
+    <div>
+        <h6 id="madeby" style="margin-top: 40px">
+            by <a href="https://github.com/adolph-irizabimbuto">Adolph Irizabimbuto</a>
+        </h6>
+    </div>
+    <script src="/js/music-script.js"></script>
+</body>
+</html>

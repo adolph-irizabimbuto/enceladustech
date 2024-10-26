@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    
+      <!-- Meta Tag -->
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <script defer data-domain="enceladustech.com" src="https://plausible.io/js/script.js"></script>  
+      <!-- SEO -->
+      <meta name="description" content=" Misr Tech Blog">
+      <meta name="author" content="Adolph Irizabimbuto">
+      <meta name="url" content="http://www.enceladustech.com">
+      <meta name="robots" content="index,follow">
+      
+      
+      <title>Misr Tech Blog</title>
+      
+      <!-- Favicon -->
+      <link rel="shortcut icon" href="#">
+      <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon" href="images/favicon/apple-touch-icon.png">
+      
+      <!-- All CSS Plugins -->
+      <link rel="stylesheet" type="text/css" href="/css/plugin.css">
+      
+      <!-- Main CSS Stylesheet -->
+      <link rel="stylesheet" type="text/css" href="/css/style.css">
+      
+      <!-- Google Web Fonts  -->
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,300,500,600,700">
+    <!-- Syntax Highlighter  -->
+    <link rel="stylesheet" type="text/css" href="/css/syntax/shCore.css">
+    <link rel="stylesheet" type="text/css" href="/css/syntax/shThemeDefault.css">
+    
+  </head>
+
+ <body>
+
+    <div id="main">
+        <div class="container">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="about-fixed">
+                 
+                  <div class="my-pic">
+                     <img src="/images/global/ast.png"  alt="Picture">
+                     </div>
+                   <div class="my-detail">
+                   
+                     <div class="white-spacing">
+                         <h1>Adolph Irizabimbuto</h1>
+                         <span>Developer & Network Engineer</span>
+                     </div> 
+                    
+                    <ul class="social-icon">
+                      <li><a href="https://github.com/adolph-irizabimbuto" target="_blank" class="github"><i class="fa fa-github"></i></a></li>
+                     </ul>
+                 </div>
+               </div>
+             </div>
+                 <div class="col-md-9">
+                    <div class="col-md-12 page-body">
+                    	<div class="row">
+                            <div class="sub-title">
+                           		<a href="/Pages/misr.html" title="Go to Home Page"><h2>Back to Blog Home</h2></a>
+                             </div>
+
+                            <div class="col-md-12 content-page">
+                              <div class="col-md-12 blog-post">
+                                <div class="post-title">
+                                    <h1>How to Recover a Dual-Boot System after a Windows Update</h1> 
+                                   </div>
+                                <div class="post-info">
+                                    <span>August 27, 2024 / by <a href="#" target="_blank">Adolph Irizabimbuto</a></span>
+                                   </div>
+                                   <h4 id="introduction">Introduction</h4>
+                                   <p>Ah, the age-old dual-boot dilemma: install Windows after your Linux distro, and you’re practically inviting trouble. “No problem,” you say, “I’ll just install Windows first!” Easy, right? Well, not really it turns out. Even if you follow the rules and everything’s running smoothly, one day your system might just decide to... well... not be a system lol. Welcome to the Battle of the Boot Loaders, where even the most intricately built system is at the mercy of the all mighty Windows Boot Loader!</p>
+                                   <p>I have been running a Dual-Boot System on one of PCs for about 7 years now, and everything had be working perfectly fine... until recently, when Windows decided to update. The problem? well sometimes windows will resize the boot partition. In my case, Windows resized the /boot/efi partion from 1GB to 500MB, and in doing so, changed the UUID, and this caused my Linux Installation (Gentoo) to become unbootable.</p>
+                                   <p>In more technical terms, Windows will auto detect and reformat your /boot drive, this will change the UUIDs and probably also delete any kernel and inframfs images.</p>
+                                   <br>
+                                   
+                                   <h6>To fix this:</h6>
+                                   <p>This guide will run through how to fix this from a fresh install of Windows (it was easier to do that in my case), but you could also use it to recover the update fuckery.</p>
+                                   <p>Reinstall windows and use the partition that you aren&#39;t using for Linux, or delete the old Windows partition and build up the new disk. <b style="color: red;">DONT DELETE THE ESP partition</b>, you're FUCKED if you do this.</p>
+                                   <p class="callout success">My example is recovering a Gentoo install </p>
+                                   
+                                  </br>
+                                   <h4 id="recover-dual-boot">Recover Dual Boot</h4>
+                                   <h5 id="step-1-boot-off-a-live-usb-">Step 1: Boot off a live USB,</h5>
+                                   <p class="callout warning"> i would recommend either an ARCH live or the same OS<br></p>
+                                  </br>
+
+                                   <h5 id="step-2-id-the-relevant-partitions-to-reinstall-grub">Step 2: ID the relevant partitions to reinstall GRUB</h5>
+<pre><code>fdisk -l
+</code></pre>
+<p class="callout warning">ID the ESP and rootfs from the output, eg the <code>/boot</code> is <code>/dev/sda1</code> and the root <code>/</code> fs is <code>/dev/sda4</code><br></p>
+                                  </br>
+                                   <h5 id="step-3-mount-the-partitions">Step 3: Mount the partitions</h5>
+                                   <p>you can mount them anywhere, but the convention is to mount in <code>/mnt</code> , So lets mount a gentoo install in <code>/mnt/gentoo</code> in this example</p>
+                                   <p class="callout warning">you want to mount <code>/</code> before <code>/boot</code> because they use the same mount point<br></p>
+ <pre>
+<code>mkdir -p /mnt/gentoo/boot
+mount /dev/sda4 /mnt/gentoo
+mount /dev/sda1 /mnt/gentoo/boot #/boot</code>
+</pre>
+                                 
+                                  </br>
+                                   <h5 id="step-4-mount-the-binds">Step 4: Mount the binds</h5>
+<pre>
+<code>mount --rbind /dev /mnt/gentoo/dev
+mount --rbind /sys /mnt/gentoo/sys 
+mount --rbind /proc /mnt/gentoo/proc
+cp --dereference /etc/resolv<span class="hljs-selector-class">.conf</span> etc/resolv<span class="hljs-selector-class">.conf</span> <span class="hljs-selector-id">#for DNS</span> 
+</code></pre>
+</br>
+
+<h5 id="step-5-change-root">Step 5: Change Root</h5>
+<pre><code>choot /mnt/gentoo
+<span class="hljs-built_in">export</span> PS1=<span class="hljs-string">"(chroot) <span class="hljs-variable">$PS1</span>"</span> <span class="hljs-comment">#unique prompt</span>
+ls /boot
+</code></pre><p>the output of <code>ls /boot</code> will vary depending on your distro, if you installed Gentoo, then you should see  <strong>vm-linuz</strong> and <strong>inframfs</strong> images in <code>/boot</code>. If you dont see those, Windows got you and you'll have to get them back.  </p>
+<p>If those files arent there, you can restore them in 1 of 2 ways</p>
+
+</br>
+<h4 id="option-a-manually-reproduce-the-vmlinuz-image-to-boot-and-remake-the-imframfs-image">Option A: manually reproduce the vmlinuz image to /boot and remake the imframfs image</h4>
+</br>
+<h5 id="step-1-reproduce-the-kernal-image">Step 1: Reproduce the kernal image</h5>
+<pre><code>
+eselect kernel list
+eselect kernel set 2
+ls /usr/src/linux/linux*  # There should be a kernal image file that is a symblink to /usr/src/ 
+make menuconfig #this compies the kernal to /boot
+
+</code></pre>
+</br>
+<h5 id="step-2-reproduce-the-infraamfs-image">Step 2: Reproduce the infraamfs image</h5>
+<pre class="pre-scrollable"><code><span class="hljs-string">emerge </span><span class="hljs-built_in">--ask</span> <span class="hljs-string">sys-kernel/</span><span class="hljs-string">dracut
+</span><span class="hljs-string">dracut </span><span class="hljs-built_in">--kver=6.1.38-gentoo-_x86-64</span> <span class="hljs-comment">## tailor to your own kernal</span>
+</code></pre>
+</br>
+<h5 id="step-3-reinstall-grub">Step 3: Reinstall Grub</h5>
+<pre><code><span class="hljs-comment">grub</span><span class="hljs-literal">-</span><span class="hljs-comment">install</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">target=x86_64</span><span class="hljs-literal">-</span><span class="hljs-comment">efi</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">efi</span><span class="hljs-literal">-</span><span class="hljs-comment">directory=/boot</span>
+</code></pre>
+</br>
+<h5 id="step-4-reconfigure-grub">Step 4: Reconfigure Grub</h5>
+<pre><code>cp /boot/grub/grub<span class="hljs-selector-class">.cfg</span> /boot/grub/grub<span class="hljs-selector-class">.cfg</span><span class="hljs-selector-class">.bak</span>
+grub-mkconfig -o /boot/grub/grub.cfg
+</code></pre>
+</br>
+<h4 id="option-b-use-genkernal-or-distro-equivelent">Option B: use genkernal or Distro equivelent</h4>
+</br>
+<h5 id="step-1-genkernel">Step 1: Genkernel</h5>
+<pre><code>genkernel <span class="hljs-keyword">all</span>
+# this will recomplie the kernal <span class="hljs-keyword">and</span> inframfs images <span class="hljs-keyword">and</span> put them <span class="hljs-keyword">in</span> /boot
+</code></pre>
+</br>
+<h5 id="step-2-reinstall-grub">Step 2: Reinstall Grub</h5>
+<pre><code><span class="hljs-comment">grub</span><span class="hljs-literal">-</span><span class="hljs-comment">install</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">target=x86_64</span><span class="hljs-literal">-</span><span class="hljs-comment">efi</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">efi</span><span class="hljs-literal">-</span><span class="hljs-comment">directory=/boot</span>
+</code></pre>
+</br>
+<h5 id="step-3-reconfigure-grub">Step 3: Reconfigure Grub</h5>
+<pre><code>cp /boot/grub/grub<span class="hljs-selector-class">.cfg</span> /boot/grub/grub<span class="hljs-selector-class">.cfg</span><span class="hljs-selector-class">.bak</span>
+grub-mkconfig -o /boot/grub/grub.cfg
+</code></pre><p>Assuming you already have OS-Prober installed and configured, the vmlinuz and inframfs images and Windows Boot Manager ready, you should be good to boot back into your Linux partion.</p>
+
+<br>
+<blockquote>CAVEAT: recheck /etc/fstab and see if the the UUID for any of the devices has changed.</blockquote><p class="callout danger"></p>
+
+<img src="/images/Dual-Boot/windows.png" style="width: 80rem;" alt="image.png"></a></p>
+<pre><code>blkid   ## to get the current UUID
+cat /etc/fstab. ##cross reference the UUID of previous command with what is defined in the fstab file
+</code></pre>
+<p>turns out that Windows might change your UUIDs and if you dont change this then, your kernel will panic.</p>
+
+<p><img src="/images/Dual-Boot/kernal-panic.png" style="width: 80rem" alt="image.png"></a></p>
+
+                                </div>    
+                             </div>
+                              
+                         </div>
+                         </div>
+ 
+                  </div>
+                  <!-- Blog Post (Right Sidebar) End -->
+                
+            </div>
+         </div>
+      </div>
+    <!-- Back to Top Start -->
+    <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+    <!-- Back to Top End -->
+    <!-- All Javascript Plugins  -->
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/plugin.js"></script>
+    
+    <!-- Main Javascript File  -->
+    <script type="text/javascript" src="/js/scripts.js"></script>
+    
+   
+
+   </body>
+ </html>

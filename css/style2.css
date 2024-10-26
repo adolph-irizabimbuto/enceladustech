@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+   
+    margin: 0;
+    font-family: 'lato', sans-serif;
+    background-image: linear-gradient(
+    0deg,
+     rgb(247, 247, 247) 23,8%, 
+     rgb(252, 221, 221) 92%
+     );
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+}
+
+.music-container {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 20px 20px 0 rgba(252,169,169, 0.6);
+    display: flex;
+    padding: 1.25rem 1.875rem ;
+    position: relative;
+    margin: 6.25rem 0;
+    z-index: 10;
+    
+}
+.img-container{
+    position: relative;
+    width: 110px;
+}
+
+
+.img-container::after {
+    content: '';
+    background-color: white;
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.img-container img {
+    width: inherit;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    animation: rotate 3s linear infinite;
+    animation-play-state: paused;
+}
+
+.music-container.play .img-container img {
+    animation-play-state: running;
+}
+
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+.navigation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.action-btn {
+    background-color: transparent;
+    border: 0;
+    color: #dfdbdf;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 10px;
+    margin: 0 20px;
+}
+
+.action-btn-big {
+    color: #cdc2d0;
+    font-size: 30px;
+
+}
+
+.action-btn:focus {
+    outline: 0;
+}
+
+#darkmode{
+    margin-top: 60px;
+}
+
+.music-info{
+    background-color: rgba(255,2500,255, 0.5);
+    border-radius: 15px 15px 0 0;
+    position: absolute;
+    top: 0;
+    left: 20px;
+    width: calc(100% - 40px);
+    padding: 0px 0px 0px 150px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    opacity: 0;
+    transform: translateY(0%);
+    transition: transform 0.3s ease-in; opacity: 0.3s
+    ease-in;
+
+}
+
+.music-info h4 {
+    margin: 0;
+}
+.music-container.play .music-info{
+    opacity: 1;
+    transform:  translateY(-100%);
+}
+
+.progress-container {
+    background-color: black;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px 0;
+    height: 4px;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.progress{
+    background-color: pink;
+    border-radius: 5px;
+    height: 100%;
+    width: 0%;
+    transition:  width 0.1s linear;
+   
+}
+
+#title, #artist, #duration {
+    margin-top: 2px;
+}
+.navbar {
+    margin: 0rem 0rem 12rem 0rem;
+    background-color: #3d6bf5;
+    color: white;
+    background-image: none;
+    }
+     
+    .nav.navbar-nav.navbar-light li a {
+        color: white;
+    }
+    .custom-toggler.navbar-toggler {
+        border-color: lightgreen;
+    }
+    
+    
+    nav.div{
+        background-color: azure;
+    }
+
+
+@media only screen and (max-width: 400px) {
+.music-container {
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 20px 20px 0 rgba(252,169,169, 0.6);
+        display: flex;
+        padding: 1.25rem 1.875rem ;
+        position: relative;
+        margin: 6.25rem 0;
+        z-index: 10;
+        width: 90%;
+    }
+    .navigation {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+        margin-left: -6rem;
+    }   
+.img-container{
+    position: relative;
+    width: 6.875rem;
+    margin-bottom: 4rem;
+}
+
+.img-container::after {
+    content: '';
+    background-color: white;
+    height: 1.25rem;
+    width: 1.25rem;
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    border-radius: 50%;
+    transform: translate(-50%, -220%);
+}
+.progress-container {
+    background-color: red;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px 0;
+    height: 4px;
+    width: 128%;
+    margin-left: -2rem;
+    margin-bottom: 40px;
+}
+.progress{
+    background-color: blue;
+    border-radius: 5px;
+    height: 100%;
+    width: 0%;
+    transition:  width 0.1s linear;
+}
+.navbar {
+    margin: 0rem 0rem 12rem 0rem;
+    background-color: #3d6bf5;
+    color: white;
+    background-image: none;
+    }
+    .nav.navbar-nav.navbar-light li a {
+        color: white;
+    }
+    .custom-toggler.navbar-toggler {
+        border-color: lightgreen;
+    }
+    
+    nav.div{
+        background-color: azure;
+    }
+
+}

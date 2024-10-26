@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    
+      <!-- Meta Tag -->
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <script defer data-domain="enceladustech.com" src="https://plausible.io/js/script.js"></script>  
+      <!-- SEO -->
+      <meta name="description" content=" Misr Tech Blog">
+      <meta name="author" content="Adolph Irizabimbuto">
+      <meta name="url" content="http://www.enceladustech.com">
+      <meta name="robots" content="index,follow">
+      
+      
+      <title>Enceladus Tech | Misr Tech Blog</title>
+      
+      <!-- Favicon -->
+      <link rel="shortcut icon" href="#">
+      <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon" href="images/favicon/apple-touch-icon.png">
+      
+      <!-- All CSS Plugins -->
+      <link rel="stylesheet" type="text/css" href="/css/plugin.css">
+      
+      <!-- Main CSS Stylesheet -->
+      <link rel="stylesheet" type="text/css" href="/css/style.css">
+      
+      <!-- Google Web Fonts  -->
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,300,500,600,700">
+    <!-- Syntax Highlighter  -->
+    <link rel="stylesheet" type="text/css" href="/css/syntax/shCore.css">
+    <link rel="stylesheet" type="text/css" href="/css/syntax/shThemeDefault.css">
+    
+  </head>
+
+  <body>
+
+    <div id="main">
+        <div class="container">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="about-fixed">
+                 
+                  <div class="my-pic">
+                     <img src="/images/global/ast.png" alt="Picture">
+                     </div>
+                   <div class="my-detail">
+                   
+                     <div class="white-spacing">
+                         <h1>Adolph Irizabimbuto</h1>
+                         <span>Developer & Network Engineer</span>
+                     </div> 
+                    
+                    <ul class="social-icon">
+                      <li><a href="https://github.com/adolph-irizabimbuto" target="_blank" class="github"><i class="fa fa-github"></i></a></li>
+                     </ul>
+                 </div>
+               </div>
+             </div>
+                 <div class="col-md-9">
+                    <div class="col-md-12 page-body">
+                    	<div class="row">
+                            <div class="sub-title">
+                           		<a href="/Pages/misr.html" title="Go to Home Page"><h2>Back to Blog Home</h2></a>
+                             </div>
+
+                            <div class="col-md-12 content-page">
+                              <div class="col-md-12 blog-post">
+                                <div class="post-title">
+                                    <h1>How to circumvent Firewall blocks</h1> 
+                                   </div>
+                                <div class="post-info">
+                                    <span>September 10, 2024 / by <a href="#" target="_blank">Adolph Irizabimbuto</a></span>
+                                   </div>
+<p>
+    This a quick guide on how to use ssh tunneling
+</p>
+<br>
+<h4 id="local-tunneling">Local Tunneling</h4>
+<p>In the below example, we can assume that you are allowed to ssh to 192.168.0.135 BUT you are not allowed to RDP to that machine. 
+    <br> 
+</p>
+<pre><code>ssh -L 8181:192.168.0.135:3389  pi@192.168.0.135
+</code></pre>
+<p>Traffic sent to localhost:8181 on your machine is forwarded to 192.158.0.135, port 3389 
+    via 192.168.0.135, bypassing the firewall blocking.</p>
+ <br>
+
+ <h4 id="Forward-tunneling">Forward Tunneling</h4>
+ <p>
+    In the below example, we can assume the following 
+    <ul>
+        <li>You are allowed to ssh to 192.168.0.2 (next hop)</li>
+        <li>You are NOT allowed to ssh to 192.168.0.3 (end host) </li>
+        <li>192.168.0.2 IS allowed to ssh to 192.168.0.3</li>
+    </ul>
+ </p>
+<p>
+Stage It
+</p>
+<pre><code>ssh next-hop-username@192.168.0.2 -fNL 8081:192.168.0.3:22
+</code></pre>
+<p>
+    Explaining the flags
+    <ul>
+        <li><code>-f</code>: This option tells SSH to run in the background after asking for the password (useful for persistent tunnels).
+        </li>
+        <li><code>-N</code>: Instructs SSH not to execute a remote command. It's used for forwarding ports only.
+        </li>
+        <li><code>-L </code>: Sets up local port forwarding, (to 192.168.0.3) on the intermediary PC. (from 192.168.0.2)
+        </li>
+    </ul>
+</p>
+
+<p>
+SSH to localhost
+</p>
+<pre><code>ssh end-host-username@localhost -p 8081
+</code></pre>
+<p>
+You can also now copy files etc
+</p>
+<pre><code>scp -r -P 8081 end-host-username@localhost:/path/to/files .
+</code></pre>
+
+<br>
+<h4 id="dynamic-port-forwarding">Dynamic port forwarding</h4>
+<p>
+    The below example assume
+    <ul>
+        <li>You are allowed to SSH to 192.168.0.135</li>
+        <li>You are NOT allowed to do anything else (ie browse web etc)</li>
+    </ul>
+</p>
+<pre><code>ssh -D 8181 root@192.168.0.135 
+</code></pre>
+<p>This creates a dynamic &quot;Socks proxy&quot;</p>
+<p>Essentially all connections to localhost 8081 will be forwarded through the tunnel, to 192.168.0.135.
+    <br>
+You can then enable  &quot;Socks&quot; proxy on any browser, and once this is set up, all web requests will be forwarded to 192.168.0.135.
+<br>Dont forget to kill the process after you are done, with <code>sudo ps -aux | grep 8081 </code> and then <code>kill pid</code>
+</p>
+<br>
+<h4 id="reverse-tunneling">Reverse tunneling</h4>
+<p>Example: Remoting into work computer from home, or setting up a backdoor on a victim</p>
+<p>on work computer/victim</p>
+<pre><code>ssh -R 8181:localhost:3389 pi@192.168.0.135 
+</code></pre>
+<p>on the other PC (when you get home)</p>
+<p>open up RDP and connect to port <code>localhost:8181</code><br>If this fails, then check  <code>/etc/ssh/sshd_config</code> for the following:</p>
+
+<pre><code>GatewayPorts yes
+AllowTcpForwading yes
+</code></pre>
+<br>
+
+<h4>The Elephant in the room</h4>
+<p>When using SSH tunneling, you're essentially encapsulating one TCP connection inside another, which can lead to inefficiencies and issues:</p>
+<ul>
+    <li>Interference between congestion control mechanisms</li>
+    <li>Increased latency and jitter
+    </li>
+    <li>Head-of-line blocking
+    </li>
+    <li>Inefficient use of bandwidth
+    </li>
+    <li>Buffer bloat
+    </li>
+
+</ul>
+<br>
+<p>
+    This is where <a href="https://etherarp.net/sshuttle-a-vpn-for-the-lazy/" style="color: red;">sshshuttle</a> comes in.
+<br> In summary:
+<blockquote>sshuttle assembles the TCP stream locally, multiplexes it statefully over an ssh session, 
+    and disassembles it back into packets at the other end. So it never ends up doing TCP-over-TCP. 
+    It’s just data-over-TCP, which is safe.</blockquote>  
+</p>
+
+<pre><code>sudo sshuttle -r user@server 0/0
+</code></pre>
+<p>This will tunnel everything <code>0.0.0.0/0</code>to a remote host</p>
+                                </div>    
+                             </div>
+                              
+                         </div>
+                         </div>
+ 
+                  </div>
+                  <!-- Blog Post (Right Sidebar) End -->
+                
+            </div>
+         </div>
+      </div>
+    <!-- Back to Top Start -->
+    <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+    <!-- Back to Top End -->
+    <!-- All Javascript Plugins  -->
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/plugin.js"></script>
+    
+    <!-- Main Javascript File  -->
+    <script type="text/javascript" src="/js/scripts.js"></script>
+    
+   
+
+   </body>
+ </html>

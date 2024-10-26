@@ -1,0 +1,13 @@
+#Sitemaps
+Sitemap: https://www.enceladustech.com/sitemap.xml
+
+User-agent: Googlebot
+Allow: /images/global
+Disallow: /images/
+Disallow: /css/
+Disallow: /js/
+Disallow: /assets/
+Disallow: /blog/
+Disallow: /fonts/
+Disallow: /Photos/
+Allow: /

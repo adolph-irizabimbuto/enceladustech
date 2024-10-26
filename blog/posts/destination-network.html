@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    
+      <!-- Meta Tag -->
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <script defer data-domain="enceladustech.com" src="https://plausible.io/js/script.js"></script>  
+      <!-- SEO -->
+      <meta name="description" content=" Misr Tech Blog">
+      <meta name="author" content="Adolph Irizabimbuto">
+      <meta name="url" content="http://www.enceladustech.com">
+      <meta name="robots" content="index,follow">
+      
+      
+      <title>Enceladus Tech | Misr Blog</title>
+      
+      <!-- Favicon -->
+      <link rel="shortcut icon" href="#">
+      <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon" href="images/favicon/apple-touch-icon.png">
+      
+      <!-- All CSS Plugins -->
+      <link rel="stylesheet" type="text/css" href="/css/plugin.css">
+      
+      <!-- Main CSS Stylesheet -->
+      <link rel="stylesheet" type="text/css" href="/css/style.css">
+      
+      <!-- Google Web Fonts  -->
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,300,500,600,700">
+    <!-- Syntax Highlighter  -->
+    <link rel="stylesheet" type="text/css" href="/css/syntax/shCore.css">
+    <link rel="stylesheet" type="text/css" href="/css/syntax/shThemeDefault.css">
+    
+    
+    <!-- HTML5 shiv and Respond.js support IE8 or Older for HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+	   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+	   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+  </head>
+  <body>
+
+    <div id="main">
+        <div class="container">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="about-fixed">
+                 
+                  <div class="my-pic">
+                     <img src="/images/global/ast.png" alt="Picture">
+                     </div>
+                   <div class="my-detail">
+                   
+                     <div class="white-spacing">
+                         <h1>Adolph Irizabimbuto</h1>
+                         <span>Developer & Network Engineer</span>
+                     </div> 
+                    
+                    <ul class="social-icon">
+                      <li><a href="https://github.com/adolph-irizabimbuto" target="_blank" class="github"><i class="fa fa-github"></i></a></li>
+                     </ul>
+                 </div>
+               </div>
+             </div>
+                 <div class="col-md-9">
+                    <div class="col-md-12 page-body">
+                    	<div class="row">
+                            <div class="sub-title">
+                           		<a href="/Pages/misr.html" title="Go to Home Page"><h2>Back to Blog Home</h2></a>
+                             </div>
+
+                            <div class="col-md-12 content-page">
+                              <div class="col-md-12 blog-post">
+                                <div class="post-title">
+                                    <h1>Exploring Route Selection on a PC: A Research Hypothesis</h1> 
+                                   </div>
+                                <div class="post-info">
+                                    <span>September 22, 2024 / by <a href="#" target="_blank">Adolph Irizabimbuto</a></span>
+                                   </div>
+
+                                   
+
+<h5 id="introduction"><strong>Introduction:</strong></h5>
+<p>Recently, I became intrigued by the low-level mechanisms that govern route selection on a PC. I hypothesised that the host machine calculates a bitwise AND operation between its IP address and subnet mask to determine the network address. Similarly, when forwarding a packet, I suspected the PC performs the same AND operation with the destination IP address. If the results of both operations (i.e., the network addresses) match, the host would initiate an ARP request to obtain the destination’s MAC address and forward the packet accordingly. Otherwise, it would default to using the MAC address of its default gateway.</p>
+<p>With this hypothesis in mind, I set out to research and either validate or disprove this theory.</p>
+<h5 id="however-as-it-turns-out-a-pc-uses-a-combination-of-the-xor--and-operations">The general consensus seems to be that a PC will AND both its IP 
+    and The destination IP against the subnet mask, then compare the result. However i found <a href="https://www.dpstele.com/dps/protocol/2001/jul-aug/ip-routing.php">another</a> compelling process that a PC might use. The XOR & AND</h5>
+<br>
+<h4>Technical Analysis</h4> 
+<p><strong>AND Operation:</strong></p>
+<p>The AND operation takes two bits and returns <code>1</code> only if both bits are <code>1</code>. If either bit is <code>0</code>, it returns <code>0</code>. Here’s how it functions on a pair of bits:</p>
+<ul>
+<li><code>0 AND 0</code> = <code>0</code></li>
+<li><code>1 AND 0</code> = <code>0</code></li>
+<li><code>0 AND 1</code> = <code>0</code></li>
+<li><code>1 AND 1</code> = <code>1</code></li>
+</ul>
+<p><strong>XOR:</strong></p>
+<p>The XOR operation takes two bits and returns <code>1</code> if the bits are different, and <code>0</code> if they are the same. Here&#39;s how it operates on a pair of bits:</p>
+<ul>
+<li><code>0 XOR 0</code> = <code>0</code></li>
+<li><code>1 XOR 0</code> = <code>1</code></li>
+<li><code>0 XOR 1</code> = <code>1</code></li>
+<li><code>1 XOR 1</code> = <code>0</code></li>
+</ul>
+<p> <strong>The XOR</strong> is used to compare the bits of the source IP and destination IP. If bits are the same = 0. If bits are different = 1.</p>
+<p>A host determines whether or not a destination host is in the same network by running an XOR operation between its own <strong>address</strong> and the destination <strong>address</strong>. The host will then run an <strong>AND</strong> operation on the result of the XOR operation and its own <strong>subnet mask</strong>.</p>
+<p>If the result of the AND operation is all zeros, then the destination host is in the same network, in which case the host will forward the packet directly to the destination.</p>
+<hr>
+<p>Below are examples:   </p>
+
+<strong>Example 1: Both hosts are in the same network </strong>
+<br>
+<p>Source: 192.168.1.10<br>Destination: 192.168.1.99<br>Subnet Mask: 255.255.255.0</p>
+<p>
+ <strong>Stage 1: XOR of source and destination</strong><br>
+ <pre>
+    Source: 192.168.1.10: <code style="color: blue;">        1100 0000.1010 1000.0000 0001.0000 1010</code>
+    Destination: 192.168.1.99 : <code style="color: blue;">  1100 0000.1010 1000.0000 0001.0110 0011 
+</code>XOR result: <code style="color: red;">                  0000 0000.0000 0000.0000 0000.0110 1001</code></p></pre>
+
+<p>
+    <strong>Stage 2: AND result</strong><br>
+<pre>
+Subnet Mask: /24 <code style="color: blue;">  11111111. 11111111. 11111111. 00000000</code>
+XOR Result: <code style="color: blue;">       00000000. 00000000. 00000000. 01101001</code>
+AND Result:   <strong><code style="color: red;">       00000000. 00000000. 00000000. 00000000</code></strong>  </p></pre>
+<p>The result of the AND is all zeros, which means the destination host is in the same network, in which case the host will forward the packet directly to the destination.</p>
+
+
+<!-- Example 2 -->
+<br>
+<h5 id="example-2-hosts-are-in-different-networks"><strong>Example 2: Hosts are in different networks</strong></h5>
+
+<p>Source: 192.168.1.10/24<br>
+    Destination: 192.168.2.50/24
+    <br>Subnet Mask: 255.255.255.0</p>
+<p><strong>Stage 1: XOR of source and destination</strong></p>
+<pre>
+<p>Source: 192.168.1.10: <code style="color: blue;">       1100 0000.1010 1000.0000 0001.0000 1010</code>
+Destination: 192.168.2.50 <code style="color: blue;">   1100 0000.1010 1000.0000 0010.0011 0010</code>
+<strong>XOR result</strong>: <code style="color: red;">             0000 0000.0000 0000.0000 0011.0011 1000</code>
+</pre>
+
+<p><strong>Stage 2: AND result</strong></p>
+<pre>
+<p>Subnet Mask (/24): <code style="color: blue;">1111 1111.1111 1111.1111 1111.0000 0000</code>
+    XOR Result:<code style="color: blue;">       0000 0000.0000 0000.0000 0011.0011 1000</code>
+    AND Result: <strong> <code style="color: red;">       0000 0000.0000 0000.0000 0011.0000 0000</code></strong>
+    </pre>
+
+    <br>
+<div class="dark bg-gray-950 contain-inline-size rounded-md border-[0.5px] border-token-border-medium relative" id="bkmrk--4"><div class="sticky top-9 md:top-[5.75rem]"><div class="absolute bottom-0 right-2 flex h-9 items-center"><div class="flex items-center rounded bg-token-main-surface-secondary px-2 font-sans text-xs text-token-text-secondary"><div class="dark bg-gray-950 contain-inline-size rounded-md border-[0.5px] border-token-border-medium relative"><div class="flex items-center text-token-text-secondary bg-token-main-surface-secondary px-4 py-2 text-xs font-sans justify-between rounded-t-md h-9">The result of the AND is NOT all zeros, meaning the destination host is not on the same network, so the packet will get sent to the default gateway.  
+</div></div>  
+<br>
+</div><div class="flex items-center rounded bg-token-main-surface-secondary px-2 font-sans text-xs text-token-text-secondary">Ostensibly, XOR outputs which bits are the same between host and destination. The AND operation 
+    with the subnet mask then shows which bits SHOULD be the same for the destination to be in the same 
+    network. As you can see, the initial XOR operation is a nifty little trick, because it essentially 
+    performs 2 simultaneous checks.
+<br>
+<br>
+Ultimately, my hypothesis about the AND operations is probably how modern PC's do it, but i think the XOR & AND is still an elegant approach 
+
+</div></div></div></div>
+
+
+
+
+
+
+
+
+                                 
+
+
+
+                                </div>    
+                             </div>
+                              
+                         </div>
+                         </div>
+ 
+                  </div>
+                  <!-- Blog Post (Right Sidebar) End -->
+                
+            </div>
+         </div>
+      </div>
+    <!-- Back to Top Start -->
+    <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
+    <!-- Back to Top End -->
+    <!-- All Javascript Plugins  -->
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/plugin.js"></script>
+    
+    <!-- Main Javascript File  -->
+    <script type="text/javascript" src="/js/scripts.js"></script>
+    
+   
+
+   </body>
+ </html>
