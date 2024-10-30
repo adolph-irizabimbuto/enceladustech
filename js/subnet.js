@@ -188,7 +188,7 @@ function address(){
       TEXTAREA.innerText = ""
       TEXTAREA.append("config firewall address\n")
          //iterate though the IPs 
-         for  (let i = 1;  i < IP.length; i++){
+         for  (let i = 0;  i < IP.length; i++){
           const SANITISED_IP_ADDR = IP[i].trim()
           if(SANITISED_IP_ADDR.length <= 0){
               continue
@@ -211,7 +211,7 @@ function address(){
     if(ADDR_GROUP.value.length > 0){
       TEXTAREA.append("config firewall addrgrp\n")
       TEXTAREA.append(`edit ${ADDR_GROUP.value.trim()}\n`)
-         for  (let i = 1;  i < IP.length; i++){
+         for  (let i = 0;  i < IP.length; i++){
           const SANITISED_IP_ADDR = IP[i].trim()  
           if(SANITISED_IP_ADDR.length <= 0){
               continue
@@ -343,6 +343,8 @@ function generateWebfilter(URLs){
     });
 }
 
+
+//validate IP address
 function validateDestIPAddress(ipaddress) {
     let correctByteLength = 4;
 
