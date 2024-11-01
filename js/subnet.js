@@ -182,7 +182,8 @@ function address(){
     const FQDN = document.getElementById('fqdn-radio');
     const SUBNET = document.getElementById('subnet-radio');
     const WEBFILTER = document.getElementById('webfilter-radio');
- //Address objects
+ 
+    //Address objects
   function generateAddressObjects (IP){
     if(TICKET_NUMBER.value.length > 0){
       TEXTAREA.innerText = ""
@@ -210,7 +211,7 @@ function address(){
   function generateAddressGroup(IP){
     if(ADDR_GROUP.value.length > 0){
       TEXTAREA.append("config firewall addrgrp\n")
-      TEXTAREA.append(`edit ${ADDR_GROUP.value.trim()}\n`)
+      TEXTAREA.append(`edit "${ADDR_GROUP.value.trim()}"\n`)
          for  (let i = 0;  i < IP.length; i++){
           const SANITISED_IP_ADDR = IP[i].trim()  
           if(SANITISED_IP_ADDR.length <= 0){
